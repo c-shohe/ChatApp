@@ -10,6 +10,7 @@ import android.widget.ListView
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         this.checkUserStatus()
         this.initListView()
         this.initSendButton()
+        this.getMessages()
     }
 
 
@@ -74,9 +76,15 @@ class MainActivity : AppCompatActivity() {
         val id: String = getSharedPreferences("USER", Context.MODE_PRIVATE).getString("ID", "")
         val text: String = messageTextView.text.toString()
         val message: Message = Message(id, name, text)
-        this.getMessageRef().push().setValue(message)
+        this.getMessageRef().push().setValue(message).addOnSuccessListener {
+            this.getMessages()
+        }
     }
 
+    // get message
+    private fun getMessages() {
+        
+    }
 
     private fun getUserName(onSuccess: (String) -> Unit, onError: (Exception?) -> Unit) {
         val id: String = getSharedPreferences("USER", Context.MODE_PRIVATE).getString("ID", "")
