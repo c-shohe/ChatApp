@@ -1,5 +1,6 @@
 package com.example.shohe.chatapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -19,7 +20,14 @@ class LoginActivity : AppCompatActivity() {
     private fun initSignUpButton() {
         signupButton.setOnClickListener {
             // transition sign up activity
+            this.transitionSignUpActivity()
             Log.d("initSignUpButton()", "transition sign up activity.")
         }
+    }
+
+    // transition activity
+    private fun transitionSignUpActivity() {
+        val intent: Intent = Intent(this, SignupActivity::class.java)
+        this.startActivity(intent)
     }
 }

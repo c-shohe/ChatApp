@@ -10,12 +10,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.transitionLoinActivity()
+        this.transitionLoginActivity()
     }
 
 
     // transition activity
-    private fun transitionLoinActivity() {
+    private fun transitionLoginActivity() {
         val intent: Intent = Intent(this, LoginActivity::class.java)
         this.startActivity(intent)
     }
