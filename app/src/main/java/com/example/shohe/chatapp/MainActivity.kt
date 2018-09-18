@@ -7,10 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ListView
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -83,7 +81,29 @@ class MainActivity : AppCompatActivity() {
 
     // get message
     private fun getMessages() {
-        
+        this.getMessageRef().addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(data: DataSnapshot?) {
+                if (data != null) {
+                    val adapter: MessageAdapter = MessageAdapter(applicationContext)
+                    val ms: MutableList<Message> = mutableListOf()
+                    for (ds in data.children) {
+
+                        val message: Message = Message(
+                                (ds.child("id").value as String),
+                                (ds.child("name").value as String),
+                                (ds.child("text").value as String)
+                                )
+                        ms.add(message)
+                    }
+                    adapter.messages = ms
+                    listView.adapter = adapter
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError?) {
+                Log.w("getMessages()", "Error onCancelled: ${error}")
+            }
+        })
     }
 
     private fun getUserName(onSuccess: (String) -> Unit, onError: (Exception?) -> Unit) {
@@ -98,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                Log.w("getUser()", "Error getting documents: ${it.getException()}");
+                Log.w("getUser()", "Error getting documents: ${it.getException()}")
             }
         }
     }
