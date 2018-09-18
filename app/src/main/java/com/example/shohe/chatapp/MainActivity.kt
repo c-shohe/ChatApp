@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ListView
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,13 +17,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        this.checkUserStatus()
+        this.initListView()
+        this.initSendButton()
+    }
+
+
+    // user status: isRegisted
+    private fun checkUserStatus() {
         val dataStore: SharedPreferences = getSharedPreferences("USER", Context.MODE_PRIVATE)
         if (dataStore.getString("ID", "").isEmpty()) {
             this.transitionLoginActivity()
         }
-
-        Log.d("onCreate()", "you are resisted")
-        this.initListView()
     }
 
 
@@ -39,5 +45,12 @@ class MainActivity : AppCompatActivity() {
         adapter.messages = listOf(Message("id", "who", "testtest"), Message("id", "who", "world"))
         listView.adapter = adapter
     }
-    
+
+
+    // send button
+    private fun initSendButton() {
+        sendButton.setOnClickListener {
+            
+        }
+    }
 }
