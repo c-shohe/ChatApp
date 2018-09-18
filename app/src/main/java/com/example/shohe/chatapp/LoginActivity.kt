@@ -18,7 +18,7 @@ class LoginActivity : AppCompatActivity() {
 
     // button action
     private fun initSignUpButton() {
-        signupButton.setOnClickListener {
+        s_signupButton.setOnClickListener {
             // transition sign up activity
             this.transitionSignUpActivity()
             Log.d("initSignUpButton()", "transition sign up activity.")
