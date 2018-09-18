@@ -8,6 +8,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ListView
 import kotlinx.android.synthetic.main.activity_main.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,10 +52,47 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    // send button
+    // press send button
     private fun initSendButton() {
         sendButton.setOnClickListener {
-            
+            this.getUserName(onSuccess = {
+                this.sendMessage(it)
+            },onError = {})
+
         }
     }
+
+
+    private fun getMessageRef() : DatabaseReference {
+        val database = FirebaseDatabase.getInstance()
+        return database.getReference("chat")
+    }
+
+
+    // send message
+    private fun sendMessage(name: String) {
+        val id: String = getSharedPreferences("USER", Context.MODE_PRIVATE).getString("ID", "")
+        val text: String = messageTextView.text.toString()
+        val message: Message = Message(id, name, text)
+        this.getMessageRef().push().setValue(message)
+    }
+
+
+    private fun getUserName(onSuccess: (String) -> Unit, onError: (Exception?) -> Unit) {
+        val id: String = getSharedPreferences("USER", Context.MODE_PRIVATE).getString("ID", "")
+        val database: FirebaseFirestore = FirebaseFirestore.getInstance()
+        database.collection("user").get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                for (data: DocumentSnapshot in it.getResult()) {
+                    if (data.id == id) {
+                        val name: String? = data.get("name") as? String
+                        if (name != null) { onSuccess(name) }
+                    }
+                }
+            } else {
+                Log.w("getUser()", "Error getting documents: ${it.getException()}");
+            }
+        }
+    }
+
 }
