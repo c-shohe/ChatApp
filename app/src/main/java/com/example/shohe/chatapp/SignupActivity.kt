@@ -1,5 +1,8 @@
 package com.example.shohe.chatapp
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -39,10 +42,20 @@ class SignupActivity : AppCompatActivity() {
         user.put("password", password)
 
         database.collection("user").add(user).addOnSuccessListener {
+            val dataStore: SharedPreferences = getSharedPreferences("USER", Context.MODE_PRIVATE)
+            dataStore.edit().putString("ID", it.id).apply()
+            this.transitionMainActivity()
             Log.d("signupUser()", "Added user with ID: ${it.id}")
         }.addOnFailureListener {
             Log.w("signupUser()", "Error added user: ${it}")
         }
+    }
+
+
+    // transition activity
+    private fun transitionMainActivity() {
+        val intent: Intent = Intent(this, MainActivity::class.java)
+        this.startActivity(intent)
     }
 
 }

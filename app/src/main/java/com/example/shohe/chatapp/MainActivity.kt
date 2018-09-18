@@ -1,8 +1,11 @@
 package com.example.shohe.chatapp
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 
 class MainActivity : AppCompatActivity() {
 
@@ -10,7 +13,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.transitionLoginActivity()
+        val dataStore: SharedPreferences = getSharedPreferences("USER", Context.MODE_PRIVATE)
+        if (dataStore.getString("ID", "").isEmpty()) {
+            this.transitionLoginActivity()
+        }
+
+        Log.d("onCreate()", "you are resisted")
     }
 
 
