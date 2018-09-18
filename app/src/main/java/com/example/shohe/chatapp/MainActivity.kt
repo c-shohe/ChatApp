@@ -6,8 +6,11 @@ import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ListView
 
 class MainActivity : AppCompatActivity() {
+
+    private val listView: ListView by lazy { findViewById(R.id.listView) as ListView }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         Log.d("onCreate()", "you are resisted")
+        this.initListView()
     }
 
 
@@ -27,4 +31,13 @@ class MainActivity : AppCompatActivity() {
         val intent: Intent = Intent(this, LoginActivity::class.java)
         this.startActivity(intent)
     }
+
+
+    // adapter
+    private fun initListView() {
+        val adapter: MessageAdapter = MessageAdapter(this)
+        adapter.messages = listOf(Message("id", "who", "testtest"), Message("id", "who", "world"))
+        listView.adapter = adapter
+    }
+    
 }
